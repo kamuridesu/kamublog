@@ -4,9 +4,68 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <title>kamuridesu</title>
+    <!-- <style>
+		html, body {
+			height: 100%;
+		}
+		html {
+			display: table;
+			margin: auto;
+		}
+		body {
+			display: table-cell;
+			vertical-align: middle;
+			text-align: center;
+		}
+
+    </style> -->
 </head>
-<body>
-    Hello World!
+<body class="bg-dark text-light">
+    <header class="p-3 bg-dark text-white">
+        <div class="container">
+          <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+              <li><a href="/" class="nav-link px-2 text-secondary">Home</a></li>
+              <li><a href="/projects" class="nav-link px-2 text-white">Projects</a></li>
+              <li><a href="/about" class="nav-link px-2 text-white">About</a></li>
+            </ul>
+    
+            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+              <input id="search" type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+            </form>
+          </div>
+        </div>
+    </header>
+
+    <content class="container ">
+      <div class="img-fluid mx-auto d-block text-center">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Cat_Laptop_-_Idil_Keysan_-_Wikimedia_Giphy_stickers_2019.gif/1024px-Cat_Laptop_-_Idil_Keysan_-_Wikimedia_Giphy_stickers_2019.gif" width="40%" height="40%">
+      </div>
+    </content>
+
+    <div class="container d-flex flex-column ">
+      <footer class="text-white-50 text-center mt-auto">
+        <p>Repositório no <a href="https://github.com/kamuridesu/kamublog" class="text-white">Github</a>, by <a href="https://twitter.com/kamuri_chan" class="text-white">@kamuri_chan</a>.</p>
+      </footer>
+    </div>
+
+    <script>
+      const search_bar = document.getElementById("search");
+      function checkSearchBarContent() {
+        const Http = new XMLHttpRequest();
+        const url = "/search/?content=" + search_bar.value;
+        console.log(url);
+        // Http.open("GET", url);
+			  // Http.send();
+        // Http.onreadystatechange = (e) => {
+        // }
+      }
+
+      search_bar.addEventListener("keyup", checkSearchBarContent);
+    </script>
 </body>
 </html>
