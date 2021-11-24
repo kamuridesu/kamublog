@@ -8,8 +8,6 @@ class UserNotSupportedError(Exception):
 
 class GithubInfo:
     def __init__(self, username: str) -> None:
-        if not username or username == "":
-            raise UserNotSupportedError
         self.api_base_url = f"https://api.github.com/users/{username}/repos"
 
     def processResponse(self, response: list) -> list:
@@ -29,7 +27,7 @@ class GithubInfo:
         response = requests.get(self.api_base_url)
         if response.status_code == 200:
             return self.processResponse(response.json())
-        raise UserNotSupportedError
+        print(response.content)
 
 
 if __name__ == "__main__":

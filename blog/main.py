@@ -2,6 +2,7 @@ from flask import Flask, request, redirect, render_template
 import os
 
 from apps.github_info import GithubInfo
+from apps.functions import findRepos
 
 app = Flask(__name__)
 app.secret_key = "secret-key"
@@ -11,6 +12,16 @@ app.secret_key = "secret-key"
 def projects():
     g_info = GithubInfo("kamuridesu").makeRequest()
     return render_template("projects.html", infos=g_info)
+
+
+@app.route("/search")
+def search():
+    req = request.args.get("content")
+    response = []
+    if req:
+        response = findRepos(req, GithubInfo("kamuridesu").makeRequest())
+        print(response)
+    return render_template("search.html", items=response)
 
 
 @app.route("/")
