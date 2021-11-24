@@ -1,16 +1,16 @@
 variable "username" {
-    type = string
+  type = string
 }
 
 variable "ssh_pub_key" {
-    type = string
+  type = string
 }
 
 variable "ssh_priv_key" {
-    type = string
+  type = string
 }
 
 variable "connection_ports" {
-  type = list
+  type    = list(any)
   default = [5000, 22, 80]
 }
