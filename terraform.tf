@@ -71,3 +71,16 @@ resource "aws_instance" "site_deploy" {
     }
   }
 }
+
+resource "aws_default_vpc" "default" {
+  enable_dns_hostnames = true
+  tags = {
+    Name = "Default VPC"
+  }
+}
+
+
+resource "aws_eip" "static_ip" {
+  instance = aws_instance.site_deploy.id
+  vpc = true
+}
