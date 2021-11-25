@@ -70,6 +70,13 @@ resource "aws_instance" "site_deploy" {
       host        = self.public_ip
     }
   }
+
+  provisioner "file" {
+    source = "./blog/config.auth.json"
+    destination = "/home/${var.username}/kamublog/blog"
+    on_failure = fail
+  }
+
 }
 
 resource "aws_default_vpc" "default" {
