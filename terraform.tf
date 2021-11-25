@@ -59,7 +59,7 @@ resource "aws_instance" "site_deploy" {
       "sudo apt-get install docker-ce docker-ce-cli containerd.io -y",
       "git clone https://github.com/kamuridesu/kamublog.git && cd kamublog/blog",
       "sudo docker build -t site .",
-      "sudo docker run -d --name site -p 5000:5000 site"
+      "sudo docker run -d --name site -p 80:8080 site"
     ]
     on_failure = fail
 
