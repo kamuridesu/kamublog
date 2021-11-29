@@ -50,19 +50,10 @@ resource "aws_instance" "site_deploy" {
     Name = "Site"
   }
 
-  provisioner "remote-exec" {
-    inline = ["sudo apt update",
-      "sudo apt install git ca-certificates curl gnupg lsb-release apt-transport-https -y",
-      "curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg",
-      "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable\" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null",
-      "sudo apt-get update",
-      "sudo apt-get install docker-ce docker-ce-cli containerd.io -y",
-      "git clone https://github.com/kamuridesu/kamublog.git && cd kamublog/blog",
-      "sudo docker build -t site .",
-      "sudo docker run -d --name site -p 80:8080 site"
-    ]
+  provisioner "file" {
+    source = "./blog/config.auth.json"
+    destination = "/home/${var.username}/config.auth.json"
     on_failure = fail
-
     connection {
       type        = "ssh"
       user        = var.username
@@ -72,9 +63,55 @@ resource "aws_instance" "site_deploy" {
   }
 
   provisioner "file" {
-    source = "./blog/config.auth.json"
-    destination = "/home/${var.username}/kamublog/blog"
+    source = "./js-bot/config.admin.js.json"
+    destination = "/home/${var.username}/config.admin.js.json"
     on_failure = fail
+    connection {
+      type        = "ssh"
+      user        = var.username
+      private_key = file(var.ssh_priv_key)
+      host        = self.public_ip
+    }
+  }
+  
+  provisioner "file" {
+    source = "./js-bot/config.auth.js.json"
+    destination = "/home/${var.username}/config.auth.js.json"
+    on_failure = fail
+    connection {
+      type        = "ssh"
+      user        = var.username
+      private_key = file(var.ssh_priv_key)
+      host        = self.public_ip
+    }
+  }
+
+  provisioner "remote-exec" {
+    inline = ["sudo apt update",
+      "sudo apt install git ffmpeg webp ca-certificates curl gnupg lsb-release apt-transport-https -y",
+      "curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg",
+      "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable\" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null",
+      "sudo apt-get update",
+      "sudo apt-get install docker-ce docker-ce-cli containerd.io -y",
+      "git clone https://github.com/kamuridesu/kamublog.git && cd kamublog/blog",
+      "cp /home/${var.username}/config.auth.json .",
+      "sudo docker build -t site .",
+      "sudo docker run -d --name site -p 80:8080 site",
+      "cd ../.. && git clone https://github.com/kamuridesu/js-bot.git",
+      "cd js-bot",
+      "cp /home/${var.username}/config.auth.js.json ./config.auth.json",
+      "cp /home/${var.username}/config.admin.js.json ./config.admin.json",
+      "sudo docker build -t bot .",
+      "sudo docker run -d --name bot -p 5000:5000 bot"
+    ]
+    on_failure = fail
+
+    connection {
+      type        = "ssh"
+      user        = var.username
+      private_key = file(var.ssh_priv_key)
+      host        = self.public_ip
+    }
   }
 
 }
