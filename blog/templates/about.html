@@ -11,19 +11,19 @@
 <body class="bg-dark text-light">
     {% extends 'header.html' %}
     {% block content %}
+
     <content class="container ">
       <div class="img-fluid mx-auto d-block text-center">
-        <h1>Nyahello!</h1>
-        <h5>Welcome to my website! You can check my projects here: <a href="/projects"><img src="/static/images/box.png" width="5%" height="5%"></a></h5>
-        <br> 
-
-        <div class="row text-center justify-content-center d-flex flex-row">
-          {% for logo in logos %}
-          <div class="col-md-2"><a href="{{ logo['url'] }}"><img src="{{ logo['image'] }}" width="100rem" alt="{{ logo['alt'] }}"></a></div>
-          {% endfor %}
+        <img src="{{ url_for('static', filename='/images/kamuridesu.jpg') }}" alt="kamuridesu" class="img-fluid">
       </div>
-        
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Cat_Laptop_-_Idil_Keysan_-_Wikimedia_Giphy_stickers_2019.gif/1024px-Cat_Laptop_-_Idil_Keysan_-_Wikimedia_Giphy_stickers_2019.gif" width="40%" height="40%">
+
+      <div>
+        <h1 class="text-center">kamuridesu</h1>
+        <h2 class="text-center">DevOps Engineer</h2>
+        <p class="text-center">
+            Hello, I'm kamuridesu, a DevOps Engineer and technology enthusiast working at Pulse, São Luis, Brazil.
+            I'm a self-taught developer and I'm always looking for new technologies to learn.
+        </p>
       </div>
 
     </content>
