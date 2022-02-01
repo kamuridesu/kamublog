@@ -97,12 +97,6 @@ resource "aws_instance" "site_deploy" {
       "cp /home/${var.username}/config.auth.json .",
       "sudo docker build -t site .",
       "sudo docker run -d --name site -p 80:8080 site",
-      "cd ../.. && git clone https://github.com/kamuridesu/js-bot.git",
-      "cd js-bot",
-      "cp /home/${var.username}/config.auth.js.json ./config.auth.json",
-      "cp /home/${var.username}/config.admin.js.json ./config.admin.json",
-      "sudo docker build -t bot .",
-      "sudo docker run -d --name bot -p 5000:5000 bot"
     ]
     on_failure = fail
 

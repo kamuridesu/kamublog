@@ -6,7 +6,7 @@ import uuid
 from apps.github_info import GithubInfo, UserNotSupportedError
 from apps.functions import checkGetParams, checkTokenScope
 from apps.translation.translate import translate
-from apps.chatbot.chatbot import Bot
+from apps.bot import send_message
 
 app = Flask(__name__)
 app.secret_key = "secret-key"
@@ -14,24 +14,6 @@ app.secret_key = "secret-key"
 tokens = {}
 with open("allowed_keys.json", "r", encoding="utf-8") as f:
     tokens = json.loads(f.read())
-
-chatboat = Bot()
-
-
-@app.route("/api/chatbot/train", methods=["GET"])
-def train():
-    if checkGetParams(request, "token"):
-        if checkTokenScope(tokens, request.args.get("token"), "admin"):
-            chatboat.train_from_file("filename")
-    return redirect("/")
-
-
-@app.route("/api/chatbot", methods=["GET"])
-def chatbot():
-    if checkGetParams(request, "token", "text"):
-        if checkTokenScope(tokens, request.args.get("token"), "chatbot"):
-            return chatboat.get_response(request.args.get("text"))
-    return jsonify({"status": 'fail', "message": 'Invalid parameters'}), 404
 
 
 @app.route('/api/translate', methods=['GET'])
@@ -97,5 +79,20 @@ def index():
     return render_template("index.html", logos=logos)
 
 
+@app.route("/form")
+def form():
+    # get ip address 
+    ip = request.remote_addr
+    # get user agent
+    user_agent = request.headers.get("User-Agent")
+    # get user language
+    language = request.accept_languages.best_match(["ja", "en"])
+    # get user location
+    location = request.headers.get("X-Forwarded-For")
+    send_message("", "New message from\nIP: {}\nUser-Agent: {}\nLanguage: {}\nLocation: {}".format(
+        ip, user_agent, language, location))
+    return render_template("form.html")
+
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000, debug=True)
+    app.run(host="0.0.0.0", port=9000, debug=True)
