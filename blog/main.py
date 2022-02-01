@@ -1,12 +1,12 @@
 from flask import Flask, request, redirect, render_template, jsonify
-import os
+import urllib.parse
 import json
 import uuid
+import requests
 
 from apps.github_info import GithubInfo, UserNotSupportedError
 from apps.functions import checkGetParams, checkTokenScope
 from apps.translation.translate import translate
-from apps.bot import send_message
 
 app = Flask(__name__)
 app.secret_key = "secret-key"
@@ -89,8 +89,8 @@ def form():
     language = request.accept_languages.best_match(["ja", "en"])
     # get user location
     location = request.headers.get("X-Forwarded-For")
-    send_message("", "New message from\nIP: {}\nUser-Agent: {}\nLanguage: {}\nLocation: {}".format(
-        ip, user_agent, language, location))
+    requests.get("http://notifier:9999/message" + ("?chat_id=&message=" + urllib.parse.quote_plus("New message from\nIP: {}\nUser-Agent: {}\nLanguage: {}\nLocation: {}".format(
+        ip, user_agent, language, location))))
     return render_template("form.html")
 
 
