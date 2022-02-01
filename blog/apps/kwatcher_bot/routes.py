@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify, redirect
-from numpy import character
 from bot import send_message
 
 
